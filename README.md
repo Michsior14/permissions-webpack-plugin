@@ -1,90 +1,76 @@
-# PermissionsWebpackPlugin
+# permissions-webpack-plugin
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A Webpack plugin that allows you to set file permissions on output assets after the build process completes.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+[![npm version](https://badge.fury.io/js/permissions-webpack-plugin.svg)](https://badge.fury.io/js/permissions-webpack-plugin)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Installation
 
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/fTuxDlPFoU)
-
-
-## Generate a library
-
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+```bash
+npm install permissions-webpack-plugin --save-dev
 ```
 
-## Run tasks
+## Usage
 
-To build the library use:
+### Basic Usage
 
-```sh
-npx nx build pkg1
+```javascript
+const { SetFilePermissionsPlugin } = require('permissions-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new SetFilePermissionsPlugin({
+      rules: [
+        {
+          permissions: 0o755, // rwxr-xr-x
+          patterns: ['main.js', 'cli.js']
+        }
+      ]
+    })
+  ]
+};
 ```
 
-To run any task with Nx use:
+### Advanced Usage
 
-```sh
-npx nx <target> <project-name>
+```javascript
+const { SetFilePermissionsPlugin } = require('permissions-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new SetFilePermissionsPlugin({
+      rules: [
+        {
+          permissions: 0o755, // Make executable
+          patterns: [
+            /^bin\/.+$/,           // All files in bin/ directory
+            'cli.js',              // Specific file
+            /\.sh$/                // All shell scripts
+          ]
+        },
+        {
+          permissions: 0o644, // Read-write for owner, read-only for others
+          patterns: [
+            /\.json$/,             // All JSON files
+            /\.txt$/               // All text files
+          ]
+        }
+      ]
+    })
+  ]
+};
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Limitations
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- Only works with file systems that support the `chmod` operation, otherwise changes are skipped
+- Permissions are applied after the build completes (during the `afterEmit` hook)
 
-## Versioning and releasing
+## Development
 
-To version and release the library use
+This project is built using [Nx](https://nx.dev).
 
-```
-npx nx release
-```
+## License
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
-```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+MIT

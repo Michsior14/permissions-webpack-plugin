@@ -1,6 +1,29 @@
 {
   "name": "permissions-webpack-plugin",
   "version": "0.1.1",
+  "description": "A Webpack plugin to set file permissions on output assets",
+  "bugs": {
+    "url": "https://github.com/Michsior14/permissions-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/Michsior14/permissions-webpack-plugin#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Michsior14/permissions-webpack-plugin",
+    "directory": "packages/permissions-webpack-plugin"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "permissions",
+    "move",
+    "copy"
+  ],
+  "author": {
+    "name": "Michał Mrozek",
+    "email": "github@michalmrozek.dev"
+  },
+  "sideEffects": false,
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
